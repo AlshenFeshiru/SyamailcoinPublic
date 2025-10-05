@@ -1,0 +1,16 @@
+[0;1;32m●[0m syamailcoin.service - Syamailcoin Node - Gödel's Untouched Money
+     Loaded: loaded (/etc/systemd/system/syamailcoin.service; enabled; vendor preset: enabled)
+     Active: [0;1;32mactive (running)[0m since Sun 2025-10-05 21:00:12 UTC; 37ms ago
+   Main PID: 15942 (run.sh)
+      Tasks: 2 (limit: 1101)
+     Memory: 2.1M
+        CPU: 8ms
+     CGroup: /system.slice/syamailcoin.service
+             ├─15942 /bin/bash /opt/SyamailcoinPublic/run.sh
+             └─15944 java -cp bin:lib/bcprov-jdk18on-1.78.1.jar:lib/bcpkix-jdk18on-1.78.1.jar:lib/bcutil-jdk18on-1.78.1.jar:lib/gson-2.10.1.jar:lib/Java-WebSocket-1.5.7.jar:lib/slf4j-api-2.0.9.jar:lib/slf4j-simple-2.0.9.jar Main
+
+Oct 05 21:00:12 syamailcoin-node systemd[1]: syamailcoin.service: Deactivated successfully.
+Oct 05 21:00:12 syamailcoin-node systemd[1]: Stopped Syamailcoin Node - Gödel's Untouched Money.
+Oct 05 21:00:12 syamailcoin-node systemd[1]: syamailcoin.service: Consumed 1.984s CPU time.
+Oct 05 21:00:12 syamailcoin-node systemd[1]: Started Syamailcoin Node - Gödel's Untouched Money.
+Oct 05 21:00:12 syamailcoin-node run.sh[15942]: Starting Syamailcoin Node...

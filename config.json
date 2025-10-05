@@ -1,0 +1,27 @@
+{
+  "port": 8333,
+  "maxPeers": 10,
+  "network": "mainnet",
+  "dataDirectory": "data",
+  "logLevel": "INFO",
+  "mining": {
+    "enabled": true,
+    "threads": 2
+  },
+  "consensus": {
+    "byzantineTolerance": 0.1447,
+    "attackThreshold": 0.8553,
+    "proofThreshold": 0.1447
+  },
+  "economics": {
+    "totalSupply": "9469999.9999999428",
+    "genesisAmount": "235294",
+    "minReward": "0.0002231668235294118"
+  },
+  "accumulation": {
+    "gamma": 1.05,
+    "R": 10.0,
+    "tau": 0.5,
+    "phi": 0.9
+  }
+}
