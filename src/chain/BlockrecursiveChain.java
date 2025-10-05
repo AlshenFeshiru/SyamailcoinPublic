@@ -60,9 +60,26 @@ public class BlockrecursiveChain {
         return true;
     }
     
-    public Block createBlock(String previousRef, List<Transaction> transactions, List<String> recursiveRefs) {
+    public Block createBlock(String previousRef, List<Transaction> transactions, List<String> recursiveRefs, String delterAddress) {
         long newIndex = getLatestIndex() + 1;
-        Block block = new Block(newIndex, previousRef, transactions);
+        
+        double[] sj = new double[(int)newIndex + 1];
+        for (int i = 0; i <= newIndex && i < sj.length; i++) {
+            sj[i] = 1.0 + (i * 0.01);
+        }
+        accFunc.setSjValues(sj);
+        
+        BigDecimal reward = accFunc.computeReward((int)newIndex, remainingSupply);
+        
+        List<Transaction> allTransactions = new ArrayList<>();
+        if (transactions != null) {
+            allTransactions.addAll(transactions);
+        }
+        
+        Transaction coinbase = new Transaction("DELTABASE", delterAddress, reward);
+        allTransactions.add(0, coinbase);
+        
+        Block block = new Block(newIndex, previousRef, allTransactions);
         
         if (recursiveRefs != null) {
             for (String ref : recursiveRefs) {
@@ -72,15 +89,8 @@ public class BlockrecursiveChain {
             }
         }
         
-        double[] sj = new double[(int)newIndex + 1];
-        for (int i = 0; i <= newIndex && i < sj.length; i++) {
-            sj[i] = 1.0 + (i * 0.01);
-        }
-        accFunc.setSjValues(sj);
-        
         BigDecimal fi = accFunc.computeFi((int)newIndex);
         BigDecimal an = accFunc.computeAn((int)newIndex);
-        BigDecimal reward = accFunc.computeReward((int)newIndex, remainingSupply);
         
         block.setFiValue(fi);
         block.setAccumulation(an);

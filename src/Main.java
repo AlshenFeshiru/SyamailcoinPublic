@@ -98,7 +98,7 @@ public class Main {
     
     private static void startCommandLoop() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("\nCommands: status | balance | mine | send | blockrecursive | quit");
+        System.out.println("\nCommands: status | balance | delta | send | blockrecursive | quit");
         
         while (true) {
             System.out.print("\n> ");
@@ -111,8 +111,8 @@ public class Main {
                 case "balance":
                     System.out.println("Balance: " + wallet.getBalance() + " SAC");
                     break;
-                case "mine":
-                    mineBlock();
+                case "delta":
+                    deltaBlock();
                     break;
                 case "send":
                     sendTransaction(scanner);
@@ -142,10 +142,10 @@ public class Main {
         System.out.println("=".repeat(60));
     }
     
-    private static void mineBlock() {
+    private static void deltaBlock() {
         List<Transaction> txs = new ArrayList<>();
-        node.mineBlock(txs);
-        System.out.println("Block mined!");
+        node.deltaBlock(txs);
+        System.out.println("Block created via Delta!");
     }
     
     private static void sendTransaction(Scanner scanner) {

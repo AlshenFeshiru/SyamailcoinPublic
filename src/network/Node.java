@@ -7,6 +7,7 @@ import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 import java.net.InetSocketAddress;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -89,7 +90,21 @@ public class Node extends WebSocketServer {
         if (block != null && block.isValid()) {
             if (chain.addBlock(block)) {
                 System.out.println("Added new block: " + block.getHash());
+                processBlockRewards(block);
                 broadcastBlock(block);
+            }
+        }
+    }
+    
+    private void processBlockRewards(Block block) {
+        List<Transaction> transactions = block.getTransactions();
+        if (transactions != null && !transactions.isEmpty()) {
+            Transaction coinbase = transactions.get(0);
+            if (coinbase.getSender().equals("DELTABASE")) {
+                if (coinbase.getRecipient().equals(wallet.getAddress())) {
+                    wallet.addBalance(coinbase.getAmount());
+                    System.out.println("Delta reward received: " + coinbase.getAmount() + " SAC");
+                }
             }
         }
     }
@@ -126,14 +141,15 @@ public class Node extends WebSocketServer {
         }
     }
     
-    public void mineBlock(List<Transaction> transactions) {
+    public void deltaBlock(List<Transaction> transactions) {
         Block latestBlock = chain.getBlocksByIndex(chain.getLatestIndex()).get(0);
         String prevHash = latestBlock.getHash();
         
-        Block newBlock = chain.createBlock(prevHash, transactions, null);
+        Block newBlock = chain.createBlock(prevHash, transactions, null, wallet.getAddress());
         
         if (newBlock.isValid() && chain.addBlock(newBlock)) {
-            System.out.println("Mined new block: " + newBlock.getHash());
+            System.out.println("Created new block via Delta: " + newBlock.getHash());
+            processBlockRewards(newBlock);
             broadcastBlock(newBlock);
         }
     }
