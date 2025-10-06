@@ -25,6 +25,14 @@ public class Transaction {
         this.txId = calculateTxId();
     }
     
+    public Transaction(String sender, String recipient, BigDecimal amount, long timestamp) {
+        this.sender = sender;
+        this.recipient = recipient;
+        this.amount = amount;
+        this.timestamp = timestamp;
+        this.txId = calculateTxId();
+    }
+    
     public String calculateTxId() {
         String data = sender + recipient + amount.toString() + timestamp;
         byte[] hashBytes = sai.hash(data.getBytes());

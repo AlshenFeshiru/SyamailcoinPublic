@@ -1,6 +1,7 @@
 package chain;
 
 import core.AccumulationFunction;
+import core.SAI288;
 import consensus.ProofOfExponomial;
 import java.math.BigDecimal;
 import java.util.*;
@@ -16,6 +17,15 @@ public class BlockrecursiveChain {
     private BigDecimal remainingSupply;
     private static final BigDecimal TOTAL_SUPPLY = new BigDecimal("9469999.9999999428");
     private static final BigDecimal GENESIS_AMOUNT = new BigDecimal("235294");
+    private static final long GENESIS_TIMESTAMP = 1728086400000L;
+    private static final String GENESIS_ADDRESS = generateGenesisAddress();
+    
+    private static String generateGenesisAddress() {
+        SAI288 sai = new SAI288();
+        byte[] hash = sai.hash("SYAMAILCOIN_GENESIS".getBytes());
+        String fullHash = SAI288.toHex(hash);
+        return "SAC" + fullHash.substring(0, 40);
+    }
     
     public BlockrecursiveChain() {
         this.blocks = new ConcurrentHashMap<>();
@@ -28,10 +38,10 @@ public class BlockrecursiveChain {
     
     private void initializeGenesis() {
         List<Transaction> genesisTx = new ArrayList<>();
-        Transaction tx = new Transaction("SYSTEM", "GENESIS_WALLET", GENESIS_AMOUNT);
+        Transaction tx = new Transaction("SYSTEM", GENESIS_ADDRESS, GENESIS_AMOUNT, GENESIS_TIMESTAMP);
         genesisTx.add(tx);
         
-        genesisBlock = new Block(0, "0", genesisTx);
+        genesisBlock = new Block(0, "0", genesisTx, GENESIS_TIMESTAMP);
         genesisBlock.setFiValue(accFunc.computeFi(0));
         genesisBlock.setAccumulation(accFunc.computeAn(0));
         genesisBlock.setProofValue(1.0);
@@ -76,8 +86,8 @@ public class BlockrecursiveChain {
             allTransactions.addAll(transactions);
         }
         
-        Transaction coinbase = new Transaction("DELTABASE", delterAddress, reward);
-        allTransactions.add(0, coinbase);
+        Transaction deltabase = new Transaction("DELTABASE", delterAddress, reward);
+        allTransactions.add(0, deltabase);
         
         Block block = new Block(newIndex, previousRef, allTransactions);
         
@@ -151,5 +161,9 @@ public class BlockrecursiveChain {
             }
         }
         return true;
+    }
+    
+    public String getGenesisAddress() {
+        return GENESIS_ADDRESS;
     }
 }

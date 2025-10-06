@@ -27,11 +27,15 @@ public class Block {
     private static final SAI288 sai = new SAI288();
     
     public Block(long index, String previousReference, List<Transaction> transactions) {
+        this(index, previousReference, transactions, System.currentTimeMillis());
+    }
+    
+    public Block(long index, String previousReference, List<Transaction> transactions, long timestamp) {
         this.index = index;
         this.previousReference = previousReference;
         this.transactions = transactions != null ? transactions : new ArrayList<>();
         this.recursiveReferences = new ArrayList<>();
-        this.timestamp = System.currentTimeMillis();
+        this.timestamp = timestamp;
         this.version = 1;
         this.storageBalanced = true;
     }
