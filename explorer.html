@@ -6,207 +6,32 @@
     <title>Syamailcoin Block Explorer</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
-            color: #e8eaed;
-            line-height: 1.6;
-            overflow-x: hidden;
-            position: relative;
-        }
-        
-        #stars { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
-        .star { position: absolute; width: 2px; height: 2px; background: white; border-radius: 50%; animation: twinkle 3s infinite; }
-        
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 1; }
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-        }
-        
-        @keyframes glow {
-            0%, 100% { box-shadow: 0 0 20px rgba(96, 165, 250, 0.3); }
-            50% { box-shadow: 0 0 40px rgba(96, 165, 250, 0.6); }
-        }
-        
-        @keyframes recursive-pulse {
-            0% { transform: scale(1); opacity: 0.8; }
-            50% { transform: scale(1.05); opacity: 1; }
-            100% { transform: scale(1); opacity: 0.8; }
-        }
-        
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px; position: relative; z-index: 1; }
-        
-        header {
-            background: linear-gradient(135deg, rgba(26, 31, 46, 0.9) 0%, rgba(15, 20, 25, 0.9) 100%);
-            padding: 40px 0;
-            margin-bottom: 40px;
-            border-bottom: 2px solid rgba(96, 165, 250, 0.3);
-            backdrop-filter: blur(10px);
-            animation: glow 3s infinite;
-        }
-        
-        h1 {
-            font-size: 2.8em;
-            text-align: center;
-            background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: float 4s ease-in-out infinite;
-        }
-        
-        .subtitle {
-            text-align: center;
-            color: #94a3b8;
-            margin-top: 10px;
-            font-size: 1.1em;
-        }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-        
-        .stat-card {
-            background: linear-gradient(135deg, rgba(26, 31, 46, 0.8) 0%, rgba(15, 20, 25, 0.8) 100%);
-            padding: 25px;
-            border-radius: 15px;
-            border: 1px solid rgba(96, 165, 250, 0.2);
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-            animation: recursive-pulse 4s ease-in-out infinite;
-        }
-        
-        .stat-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(96, 165, 250, 0.5);
-            box-shadow: 0 10px 30px rgba(96, 165, 250, 0.3);
-        }
-        
-        .stat-label {
-            color: #94a3b8;
-            font-size: 0.9em;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        
-        .stat-value {
-            font-size: 2em;
-            background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            font-weight: bold;
-        }
-        
-        .block-section {
-            background: linear-gradient(135deg, rgba(26, 31, 46, 0.8) 0%, rgba(15, 20, 25, 0.8) 100%);
-            padding: 30px;
-            border-radius: 15px;
-            margin-bottom: 30px;
-            border: 1px solid rgba(96, 165, 250, 0.2);
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-        }
-        
-        .block-section:hover {
-            border-color: rgba(96, 165, 250, 0.4);
-        }
-        
-        .block-title {
-            font-size: 1.8em;
-            margin-bottom: 20px;
-            background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .block-field {
-            margin-bottom: 15px;
-            padding: 15px;
-            background: rgba(15, 20, 25, 0.6);
-            border-radius: 8px;
-            border-left: 3px solid rgba(96, 165, 250, 0.5);
-            transition: all 0.3s ease;
-        }
-        
-        .block-field:hover {
-            background: rgba(15, 20, 25, 0.8);
-            border-left-color: rgba(96, 165, 250, 0.8);
-        }
-        
-        .field-label {
-            color: #94a3b8;
-            font-size: 0.85em;
-            margin-bottom: 5px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        
-        .field-value {
-            color: #e8eaed;
-            word-break: break-all;
-            font-family: 'Courier New', monospace;
-            font-size: 0.95em;
-        }
-        
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f1419; color: #e8eaed; line-height: 1.6; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        header { background: #1a1f2e; padding: 30px 0; margin-bottom: 40px; border-bottom: 2px solid #2d3748; }
+        h1 { font-size: 2.5em; text-align: center; color: #60a5fa; }
+        .subtitle { text-align: center; color: #94a3b8; margin-top: 10px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 40px; }
+        .stat-card { background: #1a1f2e; padding: 25px; border-radius: 10px; border: 1px solid #2d3748; }
+        .stat-label { color: #94a3b8; font-size: 0.9em; margin-bottom: 8px; }
+        .stat-value { font-size: 1.8em; color: #60a5fa; font-weight: bold; }
+        .block-section { background: #1a1f2e; padding: 30px; border-radius: 10px; margin-bottom: 30px; border: 1px solid #2d3748; }
+        .block-title { font-size: 1.5em; margin-bottom: 20px; color: #60a5fa; }
+        .block-field { margin-bottom: 15px; padding: 12px; background: #0f1419; border-radius: 5px; }
+        .field-label { color: #94a3b8; font-size: 0.9em; margin-bottom: 5px; }
+        .field-value { color: #e8eaed; word-break: break-all; font-family: 'Courier New', monospace; }
         .tx-list { margin-top: 20px; }
-        
-        .tx-item {
-            background: rgba(15, 20, 25, 0.6);
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            border-left: 3px solid rgba(167, 139, 250, 0.5);
-            transition: all 0.3s ease;
-        }
-        
-        .tx-item:hover {
-            background: rgba(15, 20, 25, 0.8);
-            transform: translateX(5px);
-        }
-        
-        .loading {
-            text-align: center;
-            padding: 50px;
-            color: #94a3b8;
-            animation: recursive-pulse 2s ease-in-out infinite;
-        }
-        
-        .error {
-            background: rgba(127, 29, 29, 0.8);
-            color: #fecaca;
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-            border: 1px solid rgba(254, 202, 202, 0.3);
-        }
-        
-        a { color: #60a5fa; text-decoration: none; transition: color 0.3s ease; }
-        a:hover { color: #a78bfa; }
-        
-        .recursive-icon {
-            display: inline-block;
-            animation: recursive-pulse 3s ease-in-out infinite;
-        }
+        .tx-item { background: #0f1419; padding: 15px; border-radius: 5px; margin-bottom: 10px; border-left: 3px solid #60a5fa; }
+        .loading { text-align: center; padding: 50px; color: #94a3b8; }
+        .error { background: #7f1d1d; color: #fecaca; padding: 20px; border-radius: 5px; margin: 20px 0; }
+        a { color: #60a5fa; text-decoration: none; }
+        a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
-    <div id="stars"></div>
-    
     <header>
         <div class="container">
-            <h1><span class="recursive-icon">⛓️</span> Syamailcoin Block Explorer</h1>
+            <h1>⛓️ Syamailcoin Block Explorer</h1>
             <div class="subtitle">Gödel's Untouched Money - Blockrecursive Chain</div>
         </div>
     </header>
@@ -218,17 +43,6 @@
     </div>
 
     <script>
-        // Generate stars
-        const starsContainer = document.getElementById('stars');
-        for (let i = 0; i < 100; i++) {
-            const star = document.createElement('div');
-            star.className = 'star';
-            star.style.left = Math.random() * 100 + '%';
-            star.style.top = Math.random() * 100 + '%';
-            star.style.animationDelay = Math.random() * 3 + 's';
-            starsContainer.appendChild(star);
-        }
-
         const API_BASE = 'http://104.248.155.98:8080/api';
 
         async function fetchData(endpoint) {
