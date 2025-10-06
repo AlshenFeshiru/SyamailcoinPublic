@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Syamailcoin Block Explorer</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+            color: #e8eaed;
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        #stars { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+        .star { position: absolute; width: 2px; height: 2px; background: white; border-radius: 50%; animation: twinkle 3s infinite; }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(96, 165, 250, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(96, 165, 250, 0.6); }
+        }
+        
+        @keyframes recursive-pulse {
+            0% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.8; }
+        }
+        
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; position: relative; z-index: 1; }
+        
+        header {
+            background: linear-gradient(135deg, rgba(26, 31, 46, 0.9) 0%, rgba(15, 20, 25, 0.9) 100%);
+            padding: 40px 0;
+            margin-bottom: 40px;
+            border-bottom: 2px solid rgba(96, 165, 250, 0.3);
+            backdrop-filter: blur(10px);
+            animation: glow 3s infinite;
+        }
+        
+        h1 {
+            font-size: 2.8em;
+            text-align: center;
+            background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: float 4s ease-in-out infinite;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #94a3b8;
+            margin-top: 10px;
+            font-size: 1.1em;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, rgba(26, 31, 46, 0.8) 0%, rgba(15, 20, 25, 0.8) 100%);
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid rgba(96, 165, 250, 0.2);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            animation: recursive-pulse 4s ease-in-out infinite;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(96, 165, 250, 0.5);
+            box-shadow: 0 10px 30px rgba(96, 165, 250, 0.3);
+        }
+        
+        .stat-label {
+            color: #94a3b8;
+            font-size: 0.9em;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .stat-value {
+            font-size: 2em;
+            background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: bold;
+        }
+        
+        .block-section {
+            background: linear-gradient(135deg, rgba(26, 31, 46, 0.8) 0%, rgba(15, 20, 25, 0.8) 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(96, 165, 250, 0.2);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .block-section:hover {
+            border-color: rgba(96, 165, 250, 0.4);
+        }
+        
+        .block-title {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .block-field {
+            margin-bottom: 15px;
+            padding: 15px;
+            background: rgba(15, 20, 25, 0.6);
+            border-radius: 8px;
+            border-left: 3px solid rgba(96, 165, 250, 0.5);
+            transition: all 0.3s ease;
+        }
+        
+        .block-field:hover {
+            background: rgba(15, 20, 25, 0.8);
+            border-left-color: rgba(96, 165, 250, 0.8);
+        }
+        
+        .field-label {
+            color: #94a3b8;
+            font-size: 0.85em;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .field-value {
+            color: #e8eaed;
+            word-break: break-all;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+        }
+        
+        .tx-list { margin-top: 20px; }
+        
+        .tx-item {
+            background: rgba(15, 20, 25, 0.6);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 3px solid rgba(167, 139, 250, 0.5);
+            transition: all 0.3s ease;
+        }
+        
+        .tx-item:hover {
+            background: rgba(15, 20, 25, 0.8);
+            transform: translateX(5px);
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: #94a3b8;
+            animation: recursive-pulse 2s ease-in-out infinite;
+        }
+        
+        .error {
+            background: rgba(127, 29, 29, 0.8);
+            color: #fecaca;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 1px solid rgba(254, 202, 202, 0.3);
+        }
+        
+        a { color: #60a5fa; text-decoration: none; transition: color 0.3s ease; }
+        a:hover { color: #a78bfa; }
+        
+        .recursive-icon {
+            display: inline-block;
+            animation: recursive-pulse 3s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <div id="stars"></div>
+    
+    <header>
+        <div class="container">
+            <h1><span class="recursive-icon">⛓️</span> Syamailcoin Block Explorer</h1>
+            <div class="subtitle">Gödel's Untouched Money - Blockrecursive Chain</div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="stats-grid" id="stats"></div>
+        <div class="block-section" id="genesis"></div>
+        <div class="block-section" id="latest"></div>
+    </div>
+
+    <script>
+        // Generate stars
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 100; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 3 + 's';
+            starsContainer.appendChild(star);
+        }
+
+        const API_BASE = 'http://104.248.155.98:8080/api';
+
+        async function fetchData(endpoint) {
+            try {
+                const response = await fetch(`${API_BASE}${endpoint}`);
+                if (!response.ok) throw new Error('API request failed');
+                return await response.json();
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                return null;
+            }
+        }
+
+        function formatHash(hash) {
+            if (!hash) return 'N/A';
+            return hash.length > 20 ? `${hash.substring(0, 10)}...${hash.substring(hash.length - 10)}` : hash;
+        }
+
+        function formatTimestamp(timestamp) {
+            return new Date(timestamp).toLocaleString();
+        }
+
+        async function loadStats() {
+            const stats = await fetchData('/stats');
+            const supply = await fetchData('/supply');
+            
+            if (!stats || !supply) {
+                document.getElementById('stats').innerHTML = '<div class="error">Failed to load stats</div>';
+                return;
+            }
+
+            document.getElementById('stats').innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-label">Total Blocks</div>
+                    <div class="stat-value">${stats.totalBlocks}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Total Supply</div>
+                    <div class="stat-value">${parseFloat(supply.total).toLocaleString()} SAC</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Genesis Locked</div>
+                    <div class="stat-value">${parseFloat(supply.genesis).toLocaleString()} SAC</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Remaining Supply</div>
+                    <div class="stat-value">${parseFloat(supply.remaining).toLocaleString()} SAC</div>
+                </div>
+            `;
+        }
+
+        async function loadGenesis() {
+            const genesis = await fetchData('/genesis');
+            
+            if (!genesis) {
+                document.getElementById('genesis').innerHTML = '<div class="error">Failed to load genesis block</div>';
+                return;
+            }
+
+            const tx = genesis.transactions && genesis.transactions[0];
+            
+            document.getElementById('genesis').innerHTML = `
+                <div class="block-title">Genesis Block</div>
+                <div class="block-field">
+                    <div class="field-label">Hash</div>
+                    <div class="field-value">${genesis.hash}</div>
+                </div>
+                <div class="block-field">
+                    <div class="field-label">Index</div>
+                    <div class="field-value">${genesis.index}</div>
+                </div>
+                <div class="block-field">
+                    <div class="field-label">Timestamp</div>
+                    <div class="field-value">${formatTimestamp(genesis.timestamp)}</div>
+                </div>
+                <div class="block-field">
+                    <div class="field-label">Commitment</div>
+                    <div class="field-value">${genesis.commitment || 'N/A'}</div>
+                </div>
+                <div class="block-field">
+                    <div class="field-label">Proof Value</div>
+                    <div class="field-value">${genesis.proofValue}</div>
+                </div>
+                ${tx ? `
+                <div class="tx-list">
+                    <div class="field-label">Genesis Transaction</div>
+                    <div class="tx-item">
+                        <div class="field-label">From</div>
+                        <div class="field-value">${tx.sender}</div>
+                        <div class="field-label" style="margin-top:10px">To (Genesis Address)</div>
+                        <div class="field-value">${tx.recipient}</div>
+                        <div class="field-label" style="margin-top:10px">Amount</div>
+                        <div class="field-value">${parseFloat(tx.amount).toLocaleString()} SAC</div>
+                        <div class="field-label" style="margin-top:10px">Status</div>
+                        <div class="field-value" style="color:#ef4444">🔒 LOCKED (No private key)</div>
+                    </div>
+                </div>
+                ` : ''}
+            `;
+        }
+
+        async function loadLatest() {
+            const latest = await fetchData('/latest');
+            
+            if (!latest) {
+                document.getElementById('latest').innerHTML = '<div class="error">Failed to load latest block</div>';
+                return;
+            }
+
+            document.getElementById('latest').innerHTML = `
+                <div class="block-title">Latest Block</div>
+                <div class="block-field">
+                    <div class="field-label">Hash</div>
+                    <div class="field-value">${latest.hash}</div>
+                </div>
+                <div class="block-field">
+                    <div class="field-label">Index</div>
+                    <div class="field-value">${latest.index}</div>
+                </div>
+                <div class="block-field">
+                    <div class="field-label">Timestamp</div>
+                    <div class="field-value">${formatTimestamp(latest.timestamp)}</div>
+                </div>
+                <div class="block-field">
+                    <div class="field-label">Previous Block</div>
+                    <div class="field-value">${formatHash(latest.previousReference)}</div>
+                </div>
+                <div class="block-field">
+                    <div class="field-label">Transactions</div>
+                    <div class="field-value">${latest.transactions ? latest.transactions.length : 0}</div>
+                </div>
+            `;
+        }
+
+        async function init() {
+            document.getElementById('stats').innerHTML = '<div class="loading">Loading stats...</div>';
+            document.getElementById('genesis').innerHTML = '<div class="loading">Loading genesis...</div>';
+            document.getElementById('latest').innerHTML = '<div class="loading">Loading latest block...</div>';
+            
+            await Promise.all([
+                loadStats(),
+                loadGenesis(),
+                loadLatest()
+            ]);
+        }
+
+        init();
+        setInterval(init, 10000);
+    </script>
+</body>
+</html>
