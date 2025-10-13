@@ -1,0 +1,13 @@
+target/
+bin/
+*.class
+*.jar
+*.war
+*.ear
+data/*.dat
+lib/*.so
+*.log
+node_modules/
+.DS_Store
+.env
+application-prod.properties

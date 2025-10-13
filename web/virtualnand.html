@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VirtualNAND K9K1208UOC - Syamailcoin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1b3d 50%, #2d1b4e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            font-size: 36px;
+            background: linear-gradient(135deg, #a78bfa, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .price-tag {
+            text-align: center;
+            font-size: 48px;
+            color: #a78bfa;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: #c4b5fd;
+            font-weight: 600;
+            font-size: 18px;
+        }
+        
+        .parameter-select {
+            width: 100%;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid rgba(167, 139, 250, 0.3);
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        
+        .parameter-select:focus {
+            outline: none;
+            border-color: #a78bfa;
+        }
+        
+        .parameter-info {
+            background: rgba(167, 139, 250, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border-left: 4px solid #a78bfa;
+        }
+        
+        .parameter-info h4 {
+            color: #a78bfa;
+            margin-bottom: 10px;
+        }
+        
+        .parameter-info ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .parameter-info li {
+            padding: 5px 0;
+            color: #c4b5fd;
+        }
+        
+        .parameter-info li::before {
+            content: "▸ ";
+            color: #ec4899;
+            font-weight: bold;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 18px;
+            font-size: 18px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+            color: white;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(139, 92, 246, 0.6);
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .bonus-display {
+            display: none;
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            border-radius: 15px;
+            margin: 20px 0;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        .bonus-amount {
+            font-size: 48px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .landmark-info {
+            background: rgba(236, 72, 153, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border-left: 4px solid #ec4899;
+            display: none;
+        }
+        
+        .back-link {
+            display: inline-block;
+            color: #a78bfa;
+            text-decoration: none;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+        
+        .back-link:hover {
+            color: #ec4899;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-link">← Back to Home</a>
+        
+        <div class="header">
+            <h1>VirtualNAND K9K1208UOC</h1>
+            <p style="color: #c4b5fd; font-size: 18px;">Configure your Virtual NAND storage system</p>
+        </div>
+        
+        <div class="card">
+            <div class="price-tag">21,000 IDR</div>
+            <p style="text-align: center; color: #9ca3af; margin-bottom: 30px;">
+                Payment in SAC • Includes random bonus 10-99 SAC
+            </p>
+            
+            <div class="form-group">
+                <label>Wallet Address</label>
+                <input type="text" id="walletAddress" class="parameter-select" readonly>
+            </div>
+            
+            <div class="form-group">
+                <label>Destroyal Bias Parameter (1-10)</label>
+                <select id="parameterLevel" class="parameter-select" onchange="updateParameterInfo()">
+                    <option value="1">Level 1 - Basic (No consequences)</option>
+                    <option value="2">Level 2 - Virtual Log View</option>
+                    <option value="3">Level 3 - Battery Optimized (3% drain)</option>
+                    <option value="4">Level 4 - Storage Required (128GB)</option>
+                    <option value="5">Level 5 - Storage Enhanced (128GB)</option>
+                    <option value="6">Level 6 - High Capacity (1TB + 43Mbps)</option>
+                    <option value="7">Level 7 - High Capacity (1TB + 43Mbps)</option>
+                    <option value="8">Level 8 - High Capacity (1TB + 43Mbps)</option>
+                    <option value="9">Level 9 - High Capacity (1TB + 43Mbps)</option>
+                    <option value="10">Level 10 - Maximum Protection (77% GPU/week)</option>
+                </select>
+            </div>
+            
+            <div class="parameter-info" id="parameterInfo">
+                <h4>Parameter Details</h4>
+                <ul id="parameterDetails"></ul>
+            </div>
+            
+            <button class="btn" onclick="purchaseVirtualNAND()" id="purchaseBtn">
+                Purchase VirtualNAND K9K1208UOC
+            </button>
+            
+            <div class="bonus-display" id="bonusDisplay">
+                <h3>🎉 Purchase Successful!</h3>
+                <div class="bonus-amount" id="bonusAmount">+0 SAC</div>
+                <p>Bonus credited to your wallet</p>
+            </div>
+            
+            <div class="landmark-info" id="landmarkInfo">
+                <h4>🏛️ LandmarkFI</h4>
+                <p id="landmarkDetails"></p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const parameterDescriptions = {
+            1: [
+                "No consequences",
+                "Optimize 10% Delta operations",
+                "Ideal for casual users"
+            ],
+            2: [
+                "Virtual log view enabled",
+                "See Size Memory, Size Block details",
+                "Enhanced transparency"
+            ],
+            3: [
+                "3% battery drain",
+                "Auto Battery Saver activation",
+                "Power management included"
+            ],
+            4: [
+                "Minimum 128GB storage required",
+                "Reduces 29GB per stage progression",
+                "Enhanced data capacity"
+            ],
+            5: [
+                "Minimum 128GB storage required",
+                "Reduces 29GB per stage progression",
+                "Optimized for frequent trading"
+            ],
+            6: [
+                "1TB VirtualNAND storage",
+                "43Mbps/4hours bandwidth required",
+                "Professional tier"
+            ],
+            7: [
+                "1TB VirtualNAND storage",
+                "43Mbps/4hours bandwidth required",
+                "Professional tier"
+            ],
+            8: [
+                "1TB VirtualNAND storage",
+                "43Mbps/4hours bandwidth required",
+                "Professional tier"
+            ],
+            9: [
+                "1TB VirtualNAND storage",
+                "43Mbps/4hours bandwidth required",
+                "Professional tier"
+            ],
+            10: [
+                "100% bias prevention",
+                "77% GPU usage per week (mandatory)",
+                "Maximum security and protection",
+                "Complete Blockrecursive integrity"
+            ]
+        };
+        
+        function updateParameterInfo() {
+            const level = document.getElementById('parameterLevel').value;
+            const details = parameterDescriptions[level];
+            const detailsList = document.getElementById('parameterDetails');
+            
+            detailsList.innerHTML = '';
+            details.forEach(detail => {
+                const li = document.createElement('li');
+                li.textContent = detail;
+                detailsList.appendChild(li);
+            });
+        }
+        
+        async function purchaseVirtualNAND() {
+            const walletAddress = document.getElementById('walletAddress').value;
+            const parameterLevel = parseInt(document.getElementById('parameterLevel').value);
+            
+            document.getElementById('purchaseBtn').disabled = true;
+            document.getElementById('purchaseBtn').textContent = 'Processing...';
+            
+            try {
+                const response = await fetch('http://localhost:8080/api/virtualnand/setup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        walletAddress: walletAddress,
+                        parameterLevel: parameterLevel
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    document.getElementById('bonusAmount').textContent = '+' + data.bonusAmount + ' SAC';
+                    document.getElementById('bonusDisplay').style.display = 'block';
+                    
+                    document.getElementById('landmarkDetails').textContent = 
+                        'You have joined ' + data.landmarkId + ' with other users who selected the same parameter level. ' +
+                        'Collaborate through Delta operations to maintain Landmark energy and unlock exclusive features!';
+                    document.getElementById('landmarkInfo').style.display = 'block';
+                    
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html?address=' + walletAddress;
+                    }, 3000);
+                } else {
+                    alert('Error: ' + data.error);
+                    document.getElementById('purchaseBtn').disabled = false;
+                    document.getElementById('purchaseBtn').textContent = 'Purchase VirtualNAND K9K1208UOC';
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+                document.getElementById('purchaseBtn').disabled = false;
+                document.getElementById('purchaseBtn').textContent = 'Purchase VirtualNAND K9K1208UOC';
+            }
+        }
+        
+        const urlParams = new URLSearchParams(window.location.search);
+        const address = urlParams.get('address');
+        if (address) {
+            document.getElementById('walletAddress').value = address;
+        }
+        
+        updateParameterInfo();
+    </script>
+</body>
+</html>

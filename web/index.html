@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Syamailcoin - Gödel's Untouched Money</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1b3d 50%, #2d1b4e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+        
+        .nebula {
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(147,51,234,0.1) 0%, transparent 70%);
+            animation: rotate 60s linear infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            margin-bottom: 60px;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #a78bfa, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+        
+        .nav-icon {
+            cursor: pointer;
+            font-size: 24px;
+            color: #a78bfa;
+            transition: color 0.3s;
+        }
+        
+        .nav-icon:hover {
+            color: #ec4899;
+        }
+        
+        .hero {
+            text-align: center;
+            padding: 80px 20px;
+        }
+        
+        .hero h1 {
+            font-size: 56px;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #ffffff, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero p {
+            font-size: 20px;
+            color: #c4b5fd;
+            margin-bottom: 50px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 18px 40px;
+            font-size: 18px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+            color: white;
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.4);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(139, 92, 246, 0.6);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+        
+        .copyright {
+            text-align: center;
+            margin-top: 40px;
+            color: #9ca3af;
+            font-size: 14px;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, #1e1b4b, #312e81);
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 30px;
+            cursor: pointer;
+            color: #a78bfa;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #c4b5fd;
+            font-weight: 500;
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 2px solid rgba(167, 139, 250, 0.3);
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            font-size: 16px;
+        }
+        
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #a78bfa;
+        }
+        
+        .seed-phrase {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+        
+        .seed-word {
+            background: rgba(167, 139, 250, 0.2);
+            padding: 8px;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 14px;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
+            z-index: 2000;
+            display: none;
+            animation: slideIn 0.5s;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        .shooting-star {
+            position: fixed;
+            width: 2px;
+            height: 2px;
+            background: white;
+            box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.8);
+            animation: shoot 2s linear;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        @keyframes shoot {
+            from {
+                transform: translate(0, 0);
+                opacity: 1;
+            }
+            to {
+                transform: translate(-300px, 300px);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+    <div class="nebula"></div>
+    
+    <div class="container">
+        <header>
+            <div class="logo">SYAMAILCOIN</div>
+            <div class="nav-menu">
+                <div class="nav-icon" title="Notifications">🔔</div>
+                <div class="nav-icon" onclick="openMenu()">☰</div>
+            </div>
+        </header>
+        
+        <div class="hero">
+            <h1>Gödel's Untouched Money</h1>
+            <p>Experience the future of mathematical integrity and Byzantine-resistant consensus</p>
+            
+            <div class="action-buttons">
+                <button class="btn btn-primary" onclick="openCreateWallet()">Create Wallet</button>
+                <button class="btn btn-secondary" onclick="openBuySyamailcoin()">Buy Syamailcoin</button>
+            </div>
+            
+            <div class="copyright">
+                © 2025 Syamailcoin. All rights reserved.
+            </div>
+        </div>
+    </div>
+    
+    <div id="createWalletModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('createWalletModal')">&times;</span>
+            <h2 style="margin-bottom: 20px;">Create YO WALLET</h2>
+            
+            <div id="walletCreated" style="display: none;">
+                <div class="form-group">
+                    <label>Your Wallet Address</label>
+                    <input type="text" id="walletAddress" readonly>
+                </div>
+                
+                <div class="form-group">
+                    <label>Seed Phrase (Save these 12 words securely!)</label>
+                    <div class="seed-phrase" id="seedPhrase"></div>
+                </div>
+                
+                <button class="btn btn-primary" style="width: 100%;" onclick="proceedToVirtualNAND()">
+                    Continue to VirtualNAND
+                </button>
+            </div>
+            
+            <div id="walletCreate">
+                <button class="btn btn-primary" style="width: 100%;" onclick="generateWallet()">
+                    Generate New Wallet
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="buyModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('buyModal')">&times;</span>
+            <h2 style="margin-bottom: 20px;">Buy Syamailcoin</h2>
+            
+            <div class="form-group">
+                <label>Payment Method</label>
+                <select id="paymentMethod">
+                    <option value="usdt">USDT (Tether)</option>
+                    <option value="mastercard">Mastercard</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Amount (SAC)</label>
+                <input type="number" id="buyAmount" step="0.0002231668235294118" min="0.0002231668235294118" value="0.0002231668235294118">
+            </div>
+            
+            <div class="form-group">
+                <label>Your Wallet Address</label>
+                <input type="text" id="buyWalletAddress" placeholder="SAC...">
+            </div>
+            
+            <button class="btn btn-primary" style="width: 100%;" onclick="processPurchase()">
+                Proceed to Payment
+            </button>
+        </div>
+    </div>
+    
+    <div id="notification" class="notification"></div>
+    
+    <script>
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            for (let i = 0; i < 200; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.width = Math.random() * 3 + 'px';
+                star.style.height = star.style.width;
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+        
+        function createShootingStar() {
+            const star = document.createElement('div');
+            star.className = 'shooting-star';
+            star.style.left = Math.random() * window.innerWidth + 'px';
+            star.style.top = Math.random() * (window.innerHeight / 2) + 'px';
+            document.body.appendChild(star);
+            
+            setTimeout(() => {
+                star.remove();
+            }, 2000);
+        }
+        
+        function openCreateWallet() {
+            document.getElementById('createWalletModal').style.display = 'flex';
+        }
+        
+        function openBuySyamailcoin() {
+            document.getElementById('buyModal').style.display = 'flex';
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+        
+        function showNotification(message, duration = 3000) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.style.display = 'block';
+            
+            createShootingStar();
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, duration);
+        }
+        
+        async function generateWallet() {
+            try {
+                const response = await fetch('http://localhost:8080/api/wallet/create', {
+                    method: 'POST'
+                });
+                
+                const data = await response.json();
+                
+                document.getElementById('walletAddress').value = data.address;
+                
+                const seedPhraseContainer = document.getElementById('seedPhrase');
+                seedPhraseContainer.innerHTML = '';
+                data.seedPhrase.forEach(word => {
+                    const wordDiv = document.createElement('div');
+                    wordDiv.className = 'seed-word';
+                    wordDiv.textContent = word;
+                    seedPhraseContainer.appendChild(wordDiv);
+                });
+                
+                document.getElementById('walletCreate').style.display = 'none';
+                document.getElementById('walletCreated').style.display = 'block';
+                
+                showNotification('Wallet created successfully!');
+            } catch (error) {
+                showNotification('Error creating wallet: ' + error.message);
+            }
+        }
+        
+        function proceedToVirtualNAND() {
+            window.location.href = 'virtualnand.html?address=' + document.getElementById('walletAddress').value;
+        }
+        
+        async function processPurchase() {
+            const amount = document.getElementById('buyAmount').value;
+            const walletAddress = document.getElementById('buyWalletAddress').value;
+            const paymentMethod = document.getElementById('paymentMethod').value;
+            
+            if (!walletAddress) {
+                showNotification('Please enter your wallet address');
+                return;
+            }
+            
+            showNotification('Processing payment...');
+            
+            setTimeout(() => {
+                showNotification('Payment successful! Syamailcoin will be credited to your wallet.');
+                createShootingStar();
+                closeModal('buyModal');
+            }, 2000);
+        }
+        
+        function openMenu() {
+            alert('Menu: Whitepaper | Virtual NAND | YO WALLET | Buy | Blockrecursive');
+        }
+        
+        createStars();
+        setInterval(createShootingStar, 5000);
+    </script>
+</body>
+</html>
