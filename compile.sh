@@ -1,32 +1,27 @@
 #!/bin/bash
 
-echo "Compiling Syamailcoin Node..."
+echo "Compiling Syamailcoin..."
 
-mkdir -p bin
-mkdir -p lib
-mkdir -p data
+mkdir -p lib data
 
-cd src/java
-javac -d ../../bin -cp ../../lib/*:. *.java org/syamailcoin/*.java org/syamailcoin/core/*.java 2>&1 | grep -v "^Note:"
-cd ../..
+echo "Building with Maven (includes all Java sources)..."
+mvn clean compile
 
 if [ $? -eq 0 ]; then
-    echo "Compilation successful!"
+    echo "Maven compilation successful!"
 else
-    echo "Compilation failed!"
+    echo "Maven compilation failed!"
     exit 1
 fi
 
+echo "Compiling C++ SAI-288..."
 cd src/cpp
 g++ -std=c++11 -fPIC -shared -o ../../lib/libsai288.so SAI288.cpp
 cd ../..
 
-cd src/go
-go build -buildmode=c-shared -o ../../lib/libsai288go.so SAI288.go
-cd ../..
-
+echo "Compiling Rust SAI-288..."
 cd src/rust
 rustc --crate-type=cdylib -o ../../lib/libsai288rust.so SAI288.rs
 cd ../..
 
-echo "All SAI-288 implementations compiled!"
+echo "All compilations complete!"

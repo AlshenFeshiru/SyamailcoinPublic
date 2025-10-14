@@ -3,7 +3,7 @@ package org.syamailcoin.core;
 import java.math.BigDecimal;
 
 public class ProofOfExponomial {
-    private static final double THRESHOLD = 0.1447;
+    public static final double THRESHOLD = 0.1447;
     
     public static long binomial(int n, int r) {
         if (r > n) return 0;

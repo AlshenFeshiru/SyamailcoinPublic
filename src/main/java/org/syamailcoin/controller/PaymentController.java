@@ -3,7 +3,7 @@ package org.syamailcoin.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.syamailcoin.service.PaymentService;
+import org.syamailcoin.service.EnhancedPaymentService;
 import java.util.Map;
 
 @RestController
@@ -12,7 +12,7 @@ import java.util.Map;
 public class PaymentController {
     
     @Autowired
-    private PaymentService paymentService;
+    private EnhancedPaymentService paymentService;
     
     @PostMapping("/initiate")
     public ResponseEntity<?> initiatePayment(@RequestBody Map<String, Object> request) {
